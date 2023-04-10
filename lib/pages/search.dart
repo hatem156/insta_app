@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:insta_app/widgets/colors.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -11,8 +12,10 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mobileBackgroundColor,
       appBar: AppBar(
-        title: const Text(" Search"),
+        backgroundColor: mobileBackgroundColor,
+        title: TextFormField(decoration: const InputDecoration(labelText: "search for a user")),
       ),
     );
   }
