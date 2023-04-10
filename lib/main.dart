@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:insta_app/responsive/mobile.dart';
-import 'package:insta_app/responsive/responsive.dart';
-import 'package:insta_app/responsive/web.dart';
+import 'package:insta_app/pages/sign_in.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -17,10 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter',
       theme: ThemeData.dark(),
-      home: const Responsive(
-        mymobile: MobileScreen(),
-        myweb: WebScreen(),
-      ),
+      home: const Login(),
     );
   }
 }
