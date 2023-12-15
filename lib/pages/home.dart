@@ -1,8 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insta_app/widgets/colors.dart';
+import 'package:insta_app/pages/chat.dart';
+import 'package:insta_app/pages/register.dart';
+import 'package:insta_app/widgets/contants.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,32 +15,49 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     final double widthScreen = MediaQuery.of(context).size.width;
-    return  Scaffold(
-      backgroundColor: widthScreen>600? webBackgroundColor:mobileBackgroundColor,
-      appBar:widthScreen>600? null: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.messenger_outline_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.logout_outlined))
-        ],
-        title: SvgPicture.asset(
-          "assets/img/instagram.svg",
-          color: primaryColor,
-          height: 35,
-          width: 200,
-        ),
-      ),
+    return Scaffold(
+      backgroundColor:
+          widthScreen > 600 ? webBackgroundColor : mobileBackgroundColor,
+      appBar: widthScreen > 600
+          ? null
+          : AppBar(
+              backgroundColor: mobileBackgroundColor,
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Chat()),
+                      );
+                    },
+                    icon: const Icon(Icons.messenger_outline_outlined)),
+                IconButton(
+                    onPressed: () {
+                      _auth.signOut();
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.logout_outlined))
+              ],
+              title: SvgPicture.asset(
+                "assets/img/instagram.svg",
+                color: primaryColor,
+                height: 35,
+                width: 200,
+              ),
+            ),
       body: Container(
         decoration: BoxDecoration(
-          borderRadius:BorderRadius.circular(12) ,
+          borderRadius: BorderRadius.circular(12),
           color: mobileBackgroundColor,
         ),
-        margin:  EdgeInsets.symmetric( vertical: 11 ,horizontal: widthScreen>600? widthScreen*0.125: 0,),
+        margin: EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: widthScreen > 600 ? widthScreen * 0.050 : 0,
+        ),
         child: Column(
           children: [
             Padding(
@@ -46,11 +66,12 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
-                    children:  [
+                    children: [
                       Container(
                         padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(shape: BoxShape.circle,
-                        color: Color.fromARGB(125, 78, 91, 110)),
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color.fromARGB(125, 78, 91, 110)),
                         child: const CircleAvatar(
                           radius: 25,
                           backgroundImage: NetworkImage("assets/img/insta.jpg"),
@@ -59,9 +80,9 @@ class _HomeState extends State<Home> {
                       const SizedBox(
                         width: 17,
                       ),
-                      const Text(
-                        "username",
-                        style: TextStyle(fontSize: 15),
+                      Text(
+                        "$firstname  $lastname",
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ],
                   ),
@@ -106,19 +127,33 @@ class _HomeState extends State<Home> {
                   ]),
             ),
             Container(
-              width: double.infinity,
-              margin: const EdgeInsets.fromLTRB(15, 0, 20, 10),
-              child: const Text("10 likes",style: TextStyle(fontSize: 18,color: Color.fromARGB(255, 169, 196, 199)),)),
+                width: double.infinity,
+                margin: const EdgeInsets.fromLTRB(15, 0, 20, 10),
+                child: const Text(
+                  "10 likes",
+                  style: TextStyle(
+                      fontSize: 18, color: Color.fromARGB(255, 169, 196, 199)),
+                )),
             Row(
-              children: const [
-                SizedBox(width: 15,),
-                Text("USERNAME",
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 20,color: Color.fromARGB(255, 169, 196, 199)),),
-                SizedBox(width: 8,),
-                Text("describtion",
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 15,color: Color.fromARGB(255, 169, 196, 199)),),
+              children: [
+                const SizedBox(
+                  width: 15,
+                ),
+                Text(
+                  "$firstname  $lastname",
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                      fontSize: 20, color: Color.fromARGB(255, 169, 196, 199)),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                const Text(
+                  "describtion",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontSize: 15, color: Color.fromARGB(255, 169, 196, 199)),
+                ),
               ],
             ),
             GestureDetector(
@@ -126,22 +161,28 @@ class _HomeState extends State<Home> {
               child: Container(
                 width: double.infinity,
                 margin: const EdgeInsets.fromLTRB(15, 9, 9, 10),
-                  child: const Text("view all 100 comment",
-                  style: TextStyle(fontSize: 18,
-                  color: Color.fromARGB(255, 38, 29, 139),
+                child: const Text(
+                  "view all 100 comment",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color.fromARGB(255, 38, 29, 139),
                   ),
                   textAlign: TextAlign.start,
-                  ),),
+                ),
+              ),
             ),
             Container(
-                width: double.infinity,
-                margin: const EdgeInsets.fromLTRB(15, 0, 9, 10),
-                  child: const Text("10 june 2022",
-                  style: TextStyle(fontSize: 18,
+              width: double.infinity,
+              margin: const EdgeInsets.fromLTRB(15, 0, 9, 10),
+              child: const Text(
+                "10 june 2022",
+                style: TextStyle(
+                  fontSize: 18,
                   color: Color.fromARGB(255, 38, 29, 139),
-                  ),
-                  textAlign: TextAlign.start,
-                  ),),
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
           ],
         ),
       ),

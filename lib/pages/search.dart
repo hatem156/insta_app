@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:insta_app/widgets/colors.dart';
+import 'package:insta_app/widgets/contants.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});

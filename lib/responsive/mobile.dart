@@ -4,7 +4,7 @@ import 'package:insta_app/pages/add_pic.dart';
 import 'package:insta_app/pages/home.dart';
 import 'package:insta_app/pages/profile.dart';
 import 'package:insta_app/pages/search.dart';
-import 'package:insta_app/widgets/colors.dart';
+import 'package:insta_app/widgets/contants.dart';
 
 class MobileScreen extends StatefulWidget {
   const MobileScreen({super.key});

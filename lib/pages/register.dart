@@ -1,16 +1,14 @@
-
-
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_app/pages/sign_in.dart';
-
+import 'package:insta_app/responsive/mobile.dart';
+import 'package:insta_app/responsive/responsive.dart';
+import 'package:insta_app/responsive/web.dart';
 import 'dart:io';
-
-import 'package:insta_app/widgets/colors.dart';
-
 import '../widgets/contants.dart';
 
-
+String? firstname;
+String? lastname;
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -24,6 +22,11 @@ class _RegisterState extends State<Register> {
   File? imgPath;
   String? imgName;
 
+  final _auth = FirebaseAuth.instance;
+  late String email;
+  late String password;
+  bool showspinner = false;
+
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   final emailController = TextEditingController();
@@ -33,180 +36,9 @@ class _RegisterState extends State<Register> {
   final ageController = TextEditingController();
   final titleController = TextEditingController();
 
-  bool isPassword8Char = false;
-  bool isPasswordHas1Number = false;
-  bool hasUppercase = false;
-  bool hasLowercase = false;
-  bool hasSpecialCharacters = false;
-
-  // uploadImage2Screen(ImageSource source) async {
-  //   final pickedImg = await ImagePicker().pickImage(source: source);
-  //   try {
-  //     if (pickedImg != null) {
-  //       setState(() {
-  //         imgPath = File(pickedImg.path);
-  //         imgName = basename(pickedImg.path);
-  //         int random = Random().nextInt(9999999);
-  //         imgName = "$random$imgName";
-  //         print(imgName);
-  //       });
-  //     } else {
-  //       print("NO img selected");
-  //     }
-  //   } catch (e) {
-  //     print("Error => $e");
-  //   }
-
-  //   if (!mounted) return;
-  //   Navigator.pop(context);
-  // }
-
-  // showmodel() {
-  //   return showModalBottomSheet(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return Container(
-  //         padding: const EdgeInsets.all(22),
-  //         height: 170,
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             GestureDetector(
-  //               onTap: () async {
-  //                 await uploadImage2Screen(ImageSource.camera);
-  //               },
-  //               child: Row(
-  //                 children: const [
-  //                   Icon(
-  //                     Icons.camera,
-  //                     size: 30,
-  //                   ),
-  //                   SizedBox(
-  //                     width: 11,
-  //                   ),
-  //                   Text(
-  //                     "From Camera",
-  //                     style: TextStyle(fontSize: 20),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //             const SizedBox(
-  //               height: 22,
-  //             ),
-  //             GestureDetector(
-  //               onTap: () {
-  //                 uploadImage2Screen(ImageSource.gallery);
-  //               },
-  //               child: Row(
-  //                 children: const [
-  //                   Icon(
-  //                     Icons.photo_outlined,
-  //                     size: 30,
-  //                   ),
-  //                   SizedBox(
-  //                     width: 11,
-  //                   ),
-  //                   Text(
-  //                     "From Gallery",
-  //                     style: TextStyle(fontSize: 20),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  onPasswordChanged(String password) {
-    isPassword8Char = false;
-    isPasswordHas1Number = false;
-    hasUppercase = false;
-    hasLowercase = false;
-    hasSpecialCharacters = false;
-    setState(() {
-      if (password.contains(RegExp(r'.{8,}'))) {
-        isPassword8Char = true;
-      }
-
-      if (password.contains(RegExp(r'[0-9]'))) {
-        isPasswordHas1Number = true;
-      }
-
-      if (password.contains(RegExp(r'[A-Z]'))) {
-        hasUppercase = true;
-      }
-
-      if (password.contains(RegExp(r'[a-z]'))) {
-        hasLowercase = true;
-      }
-
-      if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-        hasSpecialCharacters = true;
-      }
-    });
-  }
-
-//   register() async {
-//     setState(() {
-//       isLoading = true;
-//     });
-
-//     try {
-//       final credential =
-//           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-//         email: emailController.text,
-//         password: passwordController.text,
-//       );
-
-// // Upload image to firebase storage
-//       final storageRef = FirebaseStorage.instance.ref("users-imgs/$imgName");
-//       await storageRef.putFile(imgPath!);
-//       String urll = await storageRef.getDownloadURL();
-
-//       print(credential.user!.uid);
-
-
-
-
-//       CollectionReference users =
-//           FirebaseFirestore.instance.collection('userSSS');
-
-//       users
-//           .doc(credential.user!.uid)
-//           .set({
-//             "imgLink":   urll     ,
-//             'username': usernameController.text,
-//             'age': ageController.text,
-//             "title": titleController.text,
-//             "email": emailController.text,
-//             "pass": passwordController.text,
-//           })
-//           .then((value) => print("User Added"))
-//           .catchError((error) => print("Failed to add user: $error"));
-//     } on FirebaseAuthException catch (e) {
-//       if (e.code == 'weak-password') {
-//         showSnackBar(context, "The password provided is too weak.");
-//       } else if (e.code == 'email-already-in-use') {
-//         showSnackBar(context, "The account already exists for that email.");
-//       } else {
-//         showSnackBar(context, "ERROR - Please try again late");
-//       }
-//     } catch (err) {
-//       showSnackBar(context, err.toString());
-//     }
-
-//     setState(() {
-//       isLoading = false;
-//     });
-//   }
-
   @override
+  //to remove
   void dispose() {
-   
     emailController.dispose();
     passwordController.dispose();
 
@@ -218,7 +50,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-        final double widthscreen = MediaQuery.of(context).size.width;
+    final double widthscreen = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register"),
@@ -228,7 +60,9 @@ class _RegisterState extends State<Register> {
       backgroundColor: mobileBackgroundColor,
       body: Center(
         child: Padding(
-          padding:widthscreen > 600? EdgeInsets.symmetric(horizontal: widthscreen*0.20 ): const EdgeInsets.all(33.0),
+          padding: widthscreen > 600
+              ? EdgeInsets.symmetric(horizontal: widthscreen * 0.20)
+              : const EdgeInsets.all(33.0),
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
@@ -238,7 +72,7 @@ class _RegisterState extends State<Register> {
                     padding: const EdgeInsets.all(5),
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color:   Color.fromARGB(125, 78, 91, 110),
+                      color: Color.fromARGB(125, 78, 91, 110),
                     ),
                     child: Stack(
                       children: [
@@ -263,10 +97,7 @@ class _RegisterState extends State<Register> {
                           left: 99,
                           bottom: -10,
                           child: IconButton(
-                            onPressed: () {
-                              // uploadImage2Screen();
-                              //showmodel();
-                            },
+                            onPressed: () {},
                             icon: const Icon(Icons.add_a_photo),
                             color: const Color.fromARGB(255, 94, 115, 128),
                           ),
@@ -279,10 +110,13 @@ class _RegisterState extends State<Register> {
                   ),
                   TextField(
                       controller: usernameController,
+                      onChanged: (value) {
+                        firstname = value;
+                      },
                       keyboardType: TextInputType.text,
                       obscureText: false,
                       decoration: decorationTextfield.copyWith(
-                          hintText: "Enter Your username : ",
+                          hintText: "Enter Your firstname : ",
                           suffixIcon: const Icon(Icons.person))),
                   const SizedBox(
                     height: 22,
@@ -292,16 +126,22 @@ class _RegisterState extends State<Register> {
                   ),
                   TextFormField(
                       controller: titleController,
+                      onChanged: (value) {
+                        lastname = value;
+                      },
                       keyboardType: TextInputType.text,
                       obscureText: false,
                       decoration: decorationTextfield.copyWith(
-                          hintText: "Enter Your title : ",
+                          hintText: "Enter Your lastname : ",
                           suffixIcon: const Icon(Icons.person_outline))),
                   const SizedBox(
                     height: 22,
                   ),
                   TextFormField(
                       // we return "null" when something is valid
+                      onChanged: (value) {
+                        email = value;
+                      },
                       validator: (email) {
                         return email!.contains(RegExp(
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))
@@ -319,8 +159,8 @@ class _RegisterState extends State<Register> {
                     height: 22,
                   ),
                   TextFormField(
-                      onChanged: (password) {
-                        onPasswordChanged(password);
+                      onChanged: (value) {
+                        password = value;
                       },
                       // we return "null" when something is valid
                       validator: (value) {
@@ -348,22 +188,34 @@ class _RegisterState extends State<Register> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      // if (_formKey.currentState!.validate() &&
-                      //     imgName != null &&
-                      //     imgPath != null) {
-                      //   await register();
-                      //   if (!mounted) return;
-                      //   Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(builder: (context) => const Login()),
-                      //   );
-                      // } else {
-                      //   showSnackBar(context, "ERROR");
-                      // }
+                      setState(() {
+                        showspinner = true;
+                      });
+
+                      try {
+                        final newuser =
+                            await _auth.createUserWithEmailAndPassword(
+                                email: email, password: password);
+                      } catch (e) {
+                        print(e);
+                      }
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Responsive(
+                            mymobile: MobileScreen(),
+                            myweb: WebScreen(),
+                          ),
+                        ),
+                      );
+                      setState(() {
+                        showspinner = false;
+                      });
                     },
                     style: ButtonStyle(
-                      //backgroundColor: MaterialStateProperty.all(bTNgreen),
-                      padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
+                      padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(12)),
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8))),
                     ),
@@ -386,10 +238,10 @@ class _RegisterState extends State<Register> {
                           style: TextStyle(fontSize: 18)),
                       TextButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => const Login()),
-                            );
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()));
                           },
                           child: const Text('sign in',
                               style: TextStyle(

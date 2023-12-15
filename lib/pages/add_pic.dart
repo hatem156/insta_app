@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:insta_app/widgets/contants.dart';
 
-import '../widgets/colors.dart';
 
 class Addpost extends StatefulWidget {
   const Addpost({super.key});

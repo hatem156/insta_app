@@ -2,12 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:insta_app/pages/chat.dart';
+import 'package:insta_app/widgets/contants.dart';
 
 import '../pages/add_pic.dart';
 import '../pages/home.dart';
 import '../pages/profile.dart';
 import '../pages/search.dart';
-import '../widgets/colors.dart';
+
 
 class WebScreen extends StatefulWidget {
   const WebScreen({super.key});
@@ -80,7 +82,18 @@ class _WebScreenState extends State<WebScreen> {
               icon: Icon(
                 Icons.person,
                 color: page == 4 ? primaryColor : secondaryColor,
-              ))
+              )),
+          IconButton(
+              onPressed: () {
+                _pageController.jumpToPage(5);
+                setState(() {
+                  page = 5;
+                });
+              },
+              icon: Icon(
+                Icons.chat_bubble_outline,
+                color: page == 5 ? primaryColor : secondaryColor,
+              )),
         ],
         title: SvgPicture.asset(
           "assets/img/instagram.svg",
@@ -99,6 +112,7 @@ class _WebScreenState extends State<WebScreen> {
           Addpost(),
           Center(child: Text("Hatoom",)),
           Profile(),
+          Chat(),
         ],
       ),
     );

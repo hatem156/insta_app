@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_app/widgets/colors.dart';
+import 'package:insta_app/pages/register.dart';
+import 'package:insta_app/widgets/contants.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -9,18 +11,21 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     final double widthscreen = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: mobileBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        title: const Text(
-          "username",
-          style: TextStyle(fontSize: 25),
-        ),
-      ),
+      appBar: widthscreen > 600
+          ? null
+          : AppBar(
+              backgroundColor: mobileBackgroundColor,
+              title: Text(
+                "$firstname  $lastname",
+                style: const TextStyle(fontSize: 25),
+              ),
+            ),
       body: Column(
         children: [
           Row(
@@ -36,14 +41,14 @@ class _ProfileState extends State<Profile> {
                   backgroundImage: NetworkImage("assets/img/insta.jpg"),
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Column(
-                      children: const [
+                      children: [
                         Text(
-                          "1",
+                          "3",
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
@@ -57,11 +62,11 @@ class _ProfileState extends State<Profile> {
                         )
                       ],
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: 70,
                     ),
                     Column(
-                      children: const [
+                      children: [
                         Text(
                           "100",
                           style: TextStyle(
@@ -77,11 +82,11 @@ class _ProfileState extends State<Profile> {
                         )
                       ],
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: 70,
                     ),
                     Column(
-                      children: const [
+                      children: [
                         Text(
                           "60",
                           style: TextStyle(
@@ -105,7 +110,9 @@ class _ProfileState extends State<Profile> {
           Container(
               margin: const EdgeInsets.fromLTRB(15, 22, 0, 10),
               width: double.infinity,
-              child: const Text("the best platform")),
+              child: Text(
+                "$firstname  $lastname",
+              )),
           const SizedBox(
             height: 15,
           ),
@@ -144,7 +151,10 @@ class _ProfileState extends State<Profile> {
                 width: 30,
               ),
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  _auth.signOut();
+                  Navigator.pop(context);
+                },
                 icon: const Icon(
                   Icons.logout,
                   color: Colors.grey,
@@ -157,8 +167,8 @@ class _ProfileState extends State<Profile> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
                       const Color.fromARGB(143, 255, 55, 112)),
-                  padding: MaterialStateProperty.all(
-                        EdgeInsets.symmetric(vertical:widthscreen > 600? 19: 10, horizontal: 30)),
+                  padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                      vertical: widthscreen > 600 ? 19 : 10, horizontal: 30)),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7),
                     side: const BorderSide(
@@ -174,7 +184,9 @@ class _ProfileState extends State<Profile> {
           ),
           Expanded(
             child: Padding(
-              padding:widthscreen > 600? const EdgeInsets.all(50.0): const EdgeInsets.all(10.0),
+              padding: widthscreen > 600
+                  ? const EdgeInsets.all(50.0)
+                  : const EdgeInsets.all(10.0),
               child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -184,9 +196,10 @@ class _ProfileState extends State<Profile> {
                   itemCount: 3,
                   itemBuilder: (BuildContext context, int index) {
                     return ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Image.network(
-                            "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"));
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                          "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
+                    );
                   }),
             ),
           ),
